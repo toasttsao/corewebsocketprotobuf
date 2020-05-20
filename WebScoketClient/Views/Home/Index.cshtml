@@ -1,0 +1,112 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+    <div id="page-wrap">
+        <h2>netcore websocket + protobuf</h2>
+        <div id="login">
+            <h1 style="color: white"> 請輸入你的姓名：</h1> <label for="username"><input id="username" /></label>
+            <button onclick="chat_obj.Login();">登入聊天室</button>
+        </div>
+        <p id="name-area"></p>
+        <div id="chat-wrap">
+            <div id="chat-area"></div>
+        </div>
+        <div id="send-message-area">
+            <p>你的訊息: </p>
+            <label for="message"></label><textarea style="width: 394px; margin: 0px; height: 71px;" id="message" maxlength='100'></textarea>
+            <button style="margin-left: 373px;margin-top: -99;margin-bottom: 0px;width: 83px;height: 22px;" onclick="chat_obj.Send();">送出訊息</button>
+        </div>
+
+    </div>
+
+    <script>
+        window.onload = function () {
+            $('#send-message-area,#chat-wrap').hide();
+        }
+
+
+        const chat_obj = {
+            websocket: {},
+            user_name: '',
+            Login: function () {
+                this.user_name = $('#username').val();
+                if (this.user_name !== '') {
+                    this.websocket_event(this.user_name);
+                    this.websocket.onopen = function (evt) {
+                        if (evt.type === 'open') {
+                            console.log('Connection is open ...');
+                            $('#send-message-area,#chat-wrap').show();
+                            $('#login').hide();
+                            $("#name-area").html("你是: <span>" + chat_obj.user_name + "</span>");
+
+                            const user_online_request = new proto.chatMessageRequest();
+                            user_online_request.setUser(chat_obj.user_name);
+                            user_online_request.setMsgtype('0');
+                            chat_obj.websocket.send(user_online_request.serializeBinary());
+
+
+                        }
+
+                    };
+                    this.websocket.onmessage = async function (evt) {
+
+                        const convert_to_array = await new Response(evt.data).arrayBuffer();
+                        const deserialize = proto.chatMessageResponse.deserializeBinary(convert_to_array);
+                        switch (deserialize.getMsgtype()) {
+                            case 0:
+                                //取得聊天清單
+                                console.log('目前線上人數' + deserialize.getCnt());
+                                console.log('姓名清單：');
+                                deserialize.getUsersList().forEach(user => {
+                                    console.log(user);
+                                });
+                                break;
+                            case 1:
+                                //公開聊天
+                                $('#chat-area').append($("<p>" + deserialize.getMessage() + "</p>"));
+                                break;
+                            case 2:
+                                //私下聊天
+                                $('#chat-area').append($("<p>" + deserialize.getMessage() + "</p>"));
+                                break;
+                        }
+
+
+
+
+                    };
+                    this.websocket.onerror = function (evt) {
+                        console.log(evt);
+                    };
+                    this.websocket.onclose = function (evt) {
+                        console.log('Connection closed.', evt);
+                    };
+
+                }
+            },
+            Send: function () {
+
+                const msg = $('#message').val();
+
+                const message_request = new proto.chatMessageRequest();
+                message_request.setUser(this.user_name);
+                message_request.setMsgtype('1');
+                message_request.setMessage(msg);
+                message_request.setTouser("");
+                this.websocket.send(message_request.serializeBinary());
+
+
+                $('#chat-area').append($("<p> 您說：" + msg + "</p>"));
+
+                $('#message').val('');
+
+
+            },
+            websocket_event: function (username) {
+                const server = 'wss://localhost:44306';
+                this.websocket = new WebSocket(server + '/ws?user=' + username);
+            }
+        };
+
+    </script>

@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+enum messageTypes {
+    GetOnlineUsers = 0;
+    All = 1;
+    person = 2;
+}
+
+message chatMessageResponse {
+    messageTypes msgType = 1;
+    string message = 2;
+    int32 cnt =3;
+    repeated string users = 4;
+}
+
+
+message chatMessageRequest {
+    string message = 1;
+    string touser = 2;
+    string user = 3;
+    int32 cnt =4;
+    repeated string users = 5;
+    messageTypes msgType = 6;
+
+}
