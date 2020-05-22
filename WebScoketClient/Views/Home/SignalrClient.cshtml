@@ -1,0 +1,145 @@
+﻿<div id="page-wrap">
+    <h2>netcore websocket + protobuf</h2>
+    <div id="login">
+        <h1 style="color: white"> 請輸入你的姓名：</h1> <label for="username"><input id="username" /></label>
+        <button onclick="chat_obj.Login();">登入聊天室</button>
+    </div>
+    <p id="name-area"></p>
+    <div id="chat-wrap">
+        <div id="chat-area"></div>
+    </div>
+    <div id="send-message-area">
+        <p>你的訊息: </p>
+        <label for="message"></label><textarea style="width: 394px; margin: 0px; height: 71px;" id="message" maxlength='100'></textarea>
+        <button style="margin-left: 373px;margin-top: -99;margin-bottom: 0px;width: 83px;height: 22px;" onclick="chat_obj.Send();">送出訊息</button>
+    </div>
+
+</div>
+
+
+
+
+<script type="text/javascript">
+        window.onload = function () {
+        $('#send-message-area,#chat-wrap').hide();
+    }
+
+
+
+
+
+        const chat_obj = {
+        websocket: {},
+        user_name: '',
+        Login: function () {
+            this.user_name = $('#username').val();
+            if (this.user_name !== '') {
+                 this.websocket_event(this.user_name);
+
+
+                  this.websocket.start()
+                    .then(function () {
+                        console.log('Connection is open ...');
+                        $('#send-message-area,#chat-wrap').show();
+                        $('#login').hide();
+                        $("#name-area").html("你是: <span>" + chat_obj.user_name + "</span>");
+
+                    
+                        const message_request = new proto.chatMessageRequest();
+                                message_request.setUser(username);
+                                message_request.setMsgtype('1');
+                                message_request.setMessage("歡迎:" + chat_obj.user_name);
+                                message_request.setSelfconnetionid(chat_obj.websocket.connectionId);
+                                message_request.setTouser("");
+                        var request = message_request.serializeBinary()
+                            chat_obj.websocket.invoke('send', chat_obj.encode(request));
+           
+                }).catch(error => {
+                    console.error(error.message);
+                });
+
+
+               
+                this.websocket.on('brocaste',  function (data) {
+
+
+                    const deserialize = proto.chatMessageResponse.deserializeBinary(data);
+
+                    console.log(1, deserialize.getSelfconnetionid(),chat_obj.websocket.connectionId);
+                    
+                    if (deserialize.getSelfconnetionid()!==chat_obj.websocket.connectionId){
+                          $('#chat-area').append($("<p>" + deserialize.getMessage() + "</p>"));
+                    }
+                    
+                    
+                });
+               this.websocket.on('getonlineUser',  function (data) {
+
+                   const deserialize = proto.chatMessageResponse.deserializeBinary(data);
+                    //取得聊天清單
+                    console.log('目前線上人數' + deserialize.getCnt());
+                    console.log('姓名清單：');
+                    deserialize.getUsersList().forEach(user => {
+                        console.log(user);
+                    });
+
+                });
+                
+
+            }
+        },
+        Send: function () {
+
+           const msg = $('#message').val();
+
+          const message_request = new proto.chatMessageRequest();
+                message_request.setUser(this.user_name);
+                message_request.setMsgtype('1');
+                message_request.setMessage(msg);
+                message_request.setTouser("");
+                message_request.setSelfconnetionid(chat_obj.websocket.connectionId)
+            var request = message_request.serializeBinary()
+
+            chat_obj.websocket.invoke('send', chat_obj.encode(request));
+
+
+            $('#chat-area').append($("<p> 您說：" + msg + "</p>"));
+            $('#message').val('');
+
+        },
+        websocket_event: function (username) {
+            var connection = new signalR.HubConnectionBuilder().withUrl('http://localhost:8888/chat?username='+username)
+                .build();
+
+
+            this.websocket = connection;
+            },
+            encode: function (input) {
+                  var keyStr ="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+                  var output = "";
+                  var chr1, chr2, chr3, enc1, enc2, enc3, enc4;
+                  var i = 0;
+ 
+                  while (i < input.length) {
+                    chr1 = input[i++];
+                    chr2 = i < input.length ? input[i++] : Number.NaN;
+                    chr3 = i < input.length ? input[i++] : Number.NaN;
+ 
+                    enc1 = chr1 >> 2;
+                    enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
+                    enc3 = ((chr2 & 15) << 2) | (chr3 >> 6);
+                    enc4 = chr3 & 63;
+ 
+                    if (isNaN(chr2)) {
+                      enc3 = enc4 = 64;
+                    } else if (isNaN(chr3)) {
+                      enc4 = 64;
+                    }
+                    output += keyStr.charAt(enc1) + keyStr.charAt(enc2) + 
+                              keyStr.charAt(enc3) + keyStr.charAt(enc4);
+                  }
+                  return output;
+            }
+    };
+
+</script>

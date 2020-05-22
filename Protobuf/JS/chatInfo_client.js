@@ -2121,7 +2121,8 @@ proto.chatMessageResponse.toObject = function(includeInstance, msg) {
     msgtype: jspb.Message.getFieldWithDefault(msg, 1, 0),
     message: jspb.Message.getFieldWithDefault(msg, 2, ""),
     cnt: jspb.Message.getFieldWithDefault(msg, 3, 0),
-    usersList: (f = jspb.Message.getRepeatedField(msg, 4)) == null ? undefined : f
+    usersList: (f = jspb.Message.getRepeatedField(msg, 4)) == null ? undefined : f,
+    selfconnetionid: jspb.Message.getFieldWithDefault(msg, 5, "")
   };
 
   if (includeInstance) {
@@ -2173,6 +2174,10 @@ proto.chatMessageResponse.deserializeBinaryFromReader = function(msg, reader) {
     case 4:
       var value = /** @type {string} */ (reader.readString());
       msg.addUsers(value);
+      break;
+    case 5:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setSelfconnetionid(value);
       break;
     default:
       reader.skipField();
@@ -2228,6 +2233,13 @@ proto.chatMessageResponse.serializeBinaryToWriter = function(message, writer) {
   if (f.length > 0) {
     writer.writeRepeatedString(
       4,
+      f
+    );
+  }
+  f = message.getSelfconnetionid();
+  if (f.length > 0) {
+    writer.writeString(
+      5,
       f
     );
   }
@@ -2325,6 +2337,24 @@ proto.chatMessageResponse.prototype.clearUsersList = function() {
 };
 
 
+/**
+ * optional string selfconnetionId = 5;
+ * @return {string}
+ */
+proto.chatMessageResponse.prototype.getSelfconnetionid = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 5, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.chatMessageResponse} returns this
+ */
+proto.chatMessageResponse.prototype.setSelfconnetionid = function(value) {
+  return jspb.Message.setProto3StringField(this, 5, value);
+};
+
+
 
 /**
  * List of repeated fields within this message type.
@@ -2369,7 +2399,9 @@ proto.chatMessageRequest.toObject = function(includeInstance, msg) {
     user: jspb.Message.getFieldWithDefault(msg, 3, ""),
     cnt: jspb.Message.getFieldWithDefault(msg, 4, 0),
     usersList: (f = jspb.Message.getRepeatedField(msg, 5)) == null ? undefined : f,
-    msgtype: jspb.Message.getFieldWithDefault(msg, 6, 0)
+    msgtype: jspb.Message.getFieldWithDefault(msg, 6, 0),
+    selfconnetionid: jspb.Message.getFieldWithDefault(msg, 7, ""),
+    otherconnetionid: jspb.Message.getFieldWithDefault(msg, 8, "")
   };
 
   if (includeInstance) {
@@ -2429,6 +2461,14 @@ proto.chatMessageRequest.deserializeBinaryFromReader = function(msg, reader) {
     case 6:
       var value = /** @type {!proto.messageTypes} */ (reader.readEnum());
       msg.setMsgtype(value);
+      break;
+    case 7:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setSelfconnetionid(value);
+      break;
+    case 8:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setOtherconnetionid(value);
       break;
     default:
       reader.skipField();
@@ -2498,6 +2538,20 @@ proto.chatMessageRequest.serializeBinaryToWriter = function(message, writer) {
   if (f !== 0.0) {
     writer.writeEnum(
       6,
+      f
+    );
+  }
+  f = message.getSelfconnetionid();
+  if (f.length > 0) {
+    writer.writeString(
+      7,
+      f
+    );
+  }
+  f = message.getOtherconnetionid();
+  if (f.length > 0) {
+    writer.writeString(
+      8,
       f
     );
   }
@@ -2628,6 +2682,42 @@ proto.chatMessageRequest.prototype.getMsgtype = function() {
  */
 proto.chatMessageRequest.prototype.setMsgtype = function(value) {
   return jspb.Message.setProto3EnumField(this, 6, value);
+};
+
+
+/**
+ * optional string selfconnetionId = 7;
+ * @return {string}
+ */
+proto.chatMessageRequest.prototype.getSelfconnetionid = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 7, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.chatMessageRequest} returns this
+ */
+proto.chatMessageRequest.prototype.setSelfconnetionid = function(value) {
+  return jspb.Message.setProto3StringField(this, 7, value);
+};
+
+
+/**
+ * optional string otherconnetionId = 8;
+ * @return {string}
+ */
+proto.chatMessageRequest.prototype.getOtherconnetionid = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 8, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.chatMessageRequest} returns this
+ */
+proto.chatMessageRequest.prototype.setOtherconnetionid = function(value) {
+  return jspb.Message.setProto3StringField(this, 8, value);
 };
 
 

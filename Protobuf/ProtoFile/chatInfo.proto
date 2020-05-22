@@ -11,15 +11,18 @@ message chatMessageResponse {
     string message = 2;
     int32 cnt =3;
     repeated string users = 4;
+    string selfconnetionId=5;
 }
 
 
 message chatMessageRequest {
+    
     string message = 1;
     string touser = 2;
     string user = 3;
     int32 cnt =4;
     repeated string users = 5;
     messageTypes msgType = 6;
-
+    string selfconnetionId=7;
+    string otherconnetionId=8;
 }

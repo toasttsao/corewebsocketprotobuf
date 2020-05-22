@@ -23,7 +23,7 @@ namespace WebScoketClient.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult SignalrClient()
         {
             return View();
         }
