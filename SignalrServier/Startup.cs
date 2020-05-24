@@ -1,18 +1,12 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SignalrServier.Hubs;
 using SignalrServier.Repository;
-using SignalrServier.Services;
 using SignalrServier.Services.Chat;
 using StackExchange.Redis;
 
