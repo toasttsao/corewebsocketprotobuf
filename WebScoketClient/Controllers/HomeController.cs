@@ -33,10 +33,7 @@ namespace WebScoketClient.Controllers
         [HttpPost]
         public IActionResult Login([FromForm]string username)
         {
-          var ss =  _generateJwt.GenerateJwtToken(username);
-            
-            
-            return Ok(ss);
+            return Ok(_generateJwt.GenerateJwtToken(username));
         }
         
 
