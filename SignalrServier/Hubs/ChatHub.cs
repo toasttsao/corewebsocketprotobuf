@@ -32,9 +32,7 @@ namespace SignalrServier.Hubs
             var byteArrayContent = await buffer.ConvertToStreamAsync(buffer.Count);
             var user_req = chatMessageRequest.Parser.ParseFrom(byteArrayContent);
 
-
             var instance = _chartEvents.FirstOrDefault(w => w.MessageType == (EMessageType) user_req.MsgType);
-
 
             await instance.MessageSend(Clients, user_req);
         }
@@ -49,7 +47,6 @@ namespace SignalrServier.Hubs
 
             var instance = _chartEvents.FirstOrDefault(w => w.MessageType == (EMessageType) 0);
             var user_req = new chatMessageRequest {MsgType = 0};
-
             await instance.MessageSend(Clients, user_req);
 
 
