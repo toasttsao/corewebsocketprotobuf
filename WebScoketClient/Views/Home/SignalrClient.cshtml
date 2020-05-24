@@ -1,115 +1,164 @@
 ﻿<div id="page-wrap">
-    <h2>netcore websocket + protobuf</h2>
+    <h2>netcore signalr + protobuf</h2>
     <div id="login">
-        <h1 style="color: white"> 請輸入你的姓名：</h1> <label for="username"><input id="username" /></label>
+        <h1 style="color: white"> 請輸入你的姓名：</h1>
+        <label for="username">
+            <input id="username"/>
+        </label>
         <button onclick="chat_obj.Login();">登入聊天室</button>
     </div>
     <p id="name-area"></p>
+    <p id="usr_cnt" class="usr_cnt"></p>
+
+
     <div id="chat-wrap">
         <div id="chat-area"></div>
     </div>
+
+
     <div id="send-message-area">
-        <p>你的訊息: </p>
-        <label for="message"></label><textarea style="width: 394px; margin: 0px; height: 71px;" id="message" maxlength='100'></textarea>
+        <p>線上人員: </p>
+        <select id="users" name="list_box_name" size="number_of_options">
+
+        </select>
+        <label for="message"></label><textarea style="width: 394px; margin: 0px; height: 71px;" id="message" maxlength="100"></textarea>
         <button style="margin-left: 373px;margin-top: -99;margin-bottom: 0px;width: 83px;height: 22px;" onclick="chat_obj.Send();">送出訊息</button>
     </div>
 
 </div>
-
-
-
 
 <script type="text/javascript">
         window.onload = function () {
         $('#send-message-area,#chat-wrap').hide();
     }
 
-
-
-
-
         const chat_obj = {
         websocket: {},
         user_name: '',
+        JwtToken:'',
+        selectindex:0,
+        getToken:(user_name)=>{
+                       return $.ajax({
+                                    url: "/home/login",
+                                    type: "POST",
+                                    async: false,
+                                    dataType: "html",
+                                    data: {
+                                        username: user_name
+                                    }
+                                }).fail(function (jqXHR, textStatus) {
+                                  
+                                    alert("錯誤訊息: " + textStatus);
+                                }).responseText;
+        },
         Login: function () {
             this.user_name = $('#username').val();
             if (this.user_name !== '') {
-                 this.websocket_event(this.user_name);
-
-
-                  this.websocket.start()
-                    .then(function () {
-                        console.log('Connection is open ...');
-                        $('#send-message-area,#chat-wrap').show();
-                        $('#login').hide();
-                        $("#name-area").html("你是: <span>" + chat_obj.user_name + "</span>");
-
-                    
-                        const message_request = new proto.chatMessageRequest();
-                                message_request.setUser(username);
-                                message_request.setMsgtype('1');
-                                message_request.setMessage("歡迎:" + chat_obj.user_name);
-                                message_request.setSelfconnetionid(chat_obj.websocket.connectionId);
-                                message_request.setTouser("");
-                        var request = message_request.serializeBinary()
-                            chat_obj.websocket.invoke('send', chat_obj.encode(request));
-           
-                }).catch(error => {
-                    console.error(error.message);
-                });
-
-
-               
+                
+                this.JwtToken =this.getToken(this.user_name);
+                
+                this.websocket_event(this.user_name,this.JwtToken);
+                this.websocket.start()
+                     .then(function () {
+                         console.log('連線已建立...');
+                         $('#send-message-area,#chat-wrap').show();
+                         $('#login').hide();
+                         $("#name-area").html("你是: <span>" + chat_obj.user_name + "</span>");
+        
+                     
+                         const message_request = new proto.chatMessageRequest();
+                                 message_request.setUser(username);
+                                 message_request.setMsgtype('1');
+                                 message_request.setMessage("歡迎:" + chat_obj.user_name);
+                                 message_request.setSelfconnetionid(chat_obj.websocket.connectionId);
+                                 message_request.setTouser("");
+                         const request = message_request.serializeBinary()
+                             chat_obj.websocket.invoke('send', chat_obj.encode(request));
+            
+                 }).catch(error => {
+                     console.error(error.message);
+                 });
                 this.websocket.on('brocaste',  function (data) {
+        
+        
+                     const deserialize = proto.chatMessageResponse.deserializeBinary(data);
+                     if (deserialize.getSelfconnetionid()!==chat_obj.websocket.connectionId){
+                           $('#chat-area').append($("<p>" + deserialize.getMessage() + "</p>"));
+                     }
+                     
+                     
+                 });
+                 this.websocket.on('getonlineUser',  function (data) {
+        
+                      const deserialize = proto.chatMessageResponse.deserializeBinary(data);
+                     //取得聊天清單
+                      $("#usr_cnt").html("目前線上人數: <span>" + deserialize.getCnt() + "</span>");
+                     $("#users option").remove();
+                     $("#users").append($("<option></option>").attr("value", 'all').text('All'));
+                     deserialize.getUsersList().forEach((s,i,a) => {
+                         if (chat_obj.user_name !== a[i].array[1] ){
+                             $("#users").append($("<option></option>").attr("value", a[i].array[0]).text(a[i].array[1]));
+                         }
+                     });
+                 
+                     if (chat_obj.selectindex > 0 ){
+                         $('#users option').get(chat_obj.selectindex).selected = true;
+                     }
+                 });
+                 
+                 this.websocket.on('person',  function (data) {
+                          //私下聊天
+                         const deserialize = proto.chatMessageResponse.deserializeBinary(data);
+                         $('#chat-area').append($("<p>" + deserialize.getMessage() + "</p>"));
+                      });
+                
 
-
-                    const deserialize = proto.chatMessageResponse.deserializeBinary(data);
-
-                    console.log(1, deserialize.getSelfconnetionid(),chat_obj.websocket.connectionId);
-                    
-                    if (deserialize.getSelfconnetionid()!==chat_obj.websocket.connectionId){
-                          $('#chat-area').append($("<p>" + deserialize.getMessage() + "</p>"));
-                    }
-                    
-                    
-                });
-               this.websocket.on('getonlineUser',  function (data) {
-
-                   const deserialize = proto.chatMessageResponse.deserializeBinary(data);
-                    //取得聊天清單
-                    console.log('目前線上人數' + deserialize.getCnt());
-                    console.log('姓名清單：');
-                    deserialize.getUsersList().forEach(user => {
-                        console.log(user);
-                    });
-
-                });
                 
 
             }
         },
         Send: function () {
 
-           const msg = $('#message').val();
-
-          const message_request = new proto.chatMessageRequest();
-                message_request.setUser(this.user_name);
-                message_request.setMsgtype('1');
-                message_request.setMessage(msg);
-                message_request.setTouser("");
-                message_request.setSelfconnetionid(chat_obj.websocket.connectionId)
-            var request = message_request.serializeBinary()
-
+            const message_request = new proto.chatMessageRequest();
+            const msg = $('#message').val();
+            
+                  message_request.setUser(this.user_name);
+                  message_request.setSelfconnetionid(chat_obj.websocket.connectionId)
+         
+            const option_id =$("#users").find(":selected").val();
+            const option_text =$("#users").find(":selected").text();   
+            
+                let htmlMsg ='';
+                let socketmsg='';
+                if (option_id==='all'){
+                    message_request.setMsgtype('1');
+                    htmlMsg =$("<p> 您說：" + msg + "</p>");
+                    socketmsg = this.user_name+'說：'+msg;
+                }else {
+                    message_request.setMsgtype('2');
+                    message_request.setTouser(option_text);
+                    message_request.setOtherconnetionid(option_id)
+                    htmlMsg =$("<p> 您私底下對"+ option_text +"說：" + msg + "</p>");
+                    socketmsg = this.user_name+'私底下對你說：'+msg;
+                    
+                    this.selectindex =$("#users").find(":selected").index();
+                    
+                }
+                 message_request.setMessage(socketmsg);
+               
+            const request = message_request.serializeBinary()
             chat_obj.websocket.invoke('send', chat_obj.encode(request));
 
 
-            $('#chat-area').append($("<p> 您說：" + msg + "</p>"));
+            $('#chat-area').append(htmlMsg);
             $('#message').val('');
 
         },
-        websocket_event: function (username) {
-            var connection = new signalR.HubConnectionBuilder().withUrl('http://localhost:8888/chat?username='+username)
-                .build();
+        websocket_event: function (username,jwtToken) {
+            var connection = new signalR.HubConnectionBuilder()
+                                        .withUrl('http://localhost:8888/chat', 
+                                        {accessTokenFactory: () => jwtToken})
+                                        .build();
 
 
             this.websocket = connection;

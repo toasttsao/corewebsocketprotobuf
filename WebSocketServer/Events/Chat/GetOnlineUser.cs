@@ -21,7 +21,11 @@ namespace WebSocketServer.Events.Chat
         public async Task MessageSend(chatMessageRequest userInfoRequest)
         {
             var response = new chatMessageResponse {MsgType = messageTypes.GetOnlineUsers};
-            var users= _client.clients.Select(s => s.Key);
+            var users= _client.clients.Select(s=>new chatMessageResponse.Types.user()
+            {
+                ConnectionId = s.Key,
+                Name = s.Key
+            });
             response.Users.Add(users);
            response.Cnt = _client.clients.Count();
            var outputBuffer =new ArraySegment<byte>(response.ToByteArray(), 0, (int)response.ToByteArray().Length);

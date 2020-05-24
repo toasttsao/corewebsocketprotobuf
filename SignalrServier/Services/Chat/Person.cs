@@ -1,34 +1,26 @@
-﻿using Google.Protobuf;
-using Microsoft.AspNetCore.SignalR;
-using SignalrServier.Hubs;
-using SignalrServier.Repository;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using Google.Protobuf;
+using Microsoft.AspNetCore.SignalR;
 
 namespace SignalrServier.Services.Chat
 {
-    public class BrocastAll : IChartEvent
+    public class Person: IChartEvent
     {
-        public EMessageType MessageType { get; set; } = EMessageType.All;
-
-
-
+        public EMessageType MessageType { get; set; } = EMessageType.Personal;
         public async Task MessageSend(IHubCallerClients clients, chatMessageRequest userInfoRequest)
         {
-            
             var response = new chatMessageResponse()
             {
                 SelfconnetionId = userInfoRequest.SelfconnetionId,
-                MsgType = messageTypes.All,
+                
+                MsgType = messageTypes.Person,
                 Message =userInfoRequest.Message
             };
 
             
             var outputBuffer = new ArraySegment<byte>(response.ToByteArray(), 0, (int)response.ToByteArray().Length);
-            await clients.All.SendAsync("brocaste", outputBuffer);
-
+            await clients.Client(userInfoRequest.OtherconnetionId).SendAsync("person", outputBuffer);
         }
     }
 }

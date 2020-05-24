@@ -10,8 +10,13 @@ message chatMessageResponse {
     messageTypes msgType = 1;
     string message = 2;
     int32 cnt =3;
-    repeated string users = 4;
+    repeated user users = 4;
     string selfconnetionId=5;
+    
+    message user{
+        string connection_id =1;
+        string name =2;
+    }
 }
 
 
