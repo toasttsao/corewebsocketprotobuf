@@ -1,8 +1,13 @@
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using StackExchange.Redis;
 
 namespace SignalrServier.Repository
 {
+    /// <summary>
+    /// 將使用者資訊放置Redis中
+    /// </summary>
     public class CacheUserManger:IUserManger
     {
         private readonly IConnectionMultiplexer _connectionMultiplexer;
@@ -11,11 +16,22 @@ namespace SignalrServier.Repository
         {
             _connectionMultiplexer = connectionMultiplexer;
         }
-
-        public Task GetOnlineUser()
+        public async Task<int> GetOnlineUserCnt()
         {
-            //todo 帶實作
-            throw new System.NotImplementedException();
+            var db =  _connectionMultiplexer.GetDatabase(0);
+
+            return Convert.ToInt32(await db.StringGetAsync("usercnt"));
+        }
+
+        public async Task <Dictionary<RedisValue,RedisValue>> GetOnlineUser()
+        {
+       
+            var db =  _connectionMultiplexer.GetDatabase(0);
+            var record =await  db.HashGetAllAsync("users");
+            var result=   record.ToDictionary();
+
+
+            return result;
         }
 
         public async Task AddUser(string connect_id, string user_name)

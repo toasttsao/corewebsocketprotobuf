@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using StackExchange.Redis;
 
 namespace SignalrServier.Repository
 {
@@ -6,7 +8,9 @@ namespace SignalrServier.Repository
     {
         
         
-        Task GetOnlineUser();
+
+        Task <int>  GetOnlineUserCnt();
+        Task <Dictionary<RedisValue,RedisValue>>  GetOnlineUser();
         
         Task AddUser(string connect_id,string user_name);
         
