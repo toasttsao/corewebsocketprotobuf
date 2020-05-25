@@ -3,8 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <script src="~/js/chatInfo_client.js"></script>
+    <script src="~/js/chatInfo_client.js?v=3"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
+
+
     <style>
 
         * {
@@ -14,7 +17,7 @@
 
         body {
             font: 12px "Lucida Grande", Sans-Serif;
-            background: url(bg.png);
+            background: url(../bg.png);
         }
 
         h2 {
@@ -55,7 +58,17 @@
                 padding: 8px 0;
                 border-bottom: 1px solid #ccc;
             }
-
+        .usr_cnt{
+                    position: absolute;
+                    top: 30px;
+                    right: 0;
+                    color: white;
+                    font: bold 12px "Lucida Grande", Sans-Serif;
+                    text-align: right;
+        }
+       .usr_cnt span {
+                color: #fa9f00;
+            }
         #name-area {
             position: absolute;
             top: 12px;
@@ -83,6 +96,7 @@
             float: right;
         }
     </style>
+
 </head>
 <body>
 

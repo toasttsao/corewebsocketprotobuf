@@ -22,18 +22,22 @@ public static partial class ChatInfoReflection {
   static ChatInfoReflection() {
     byte[] descriptorData = global::System.Convert.FromBase64String(
         string.Concat(
-          "Cg5jaGF0SW5mby5wcm90byJiChNjaGF0TWVzc2FnZVJlc3BvbnNlEh4KB21z",
-          "Z1R5cGUYASABKA4yDS5tZXNzYWdlVHlwZXMSDwoHbWVzc2FnZRgCIAEoCRIL",
-          "CgNjbnQYAyABKAUSDQoFdXNlcnMYBCADKAkifwoSY2hhdE1lc3NhZ2VSZXF1",
-          "ZXN0Eg8KB21lc3NhZ2UYASABKAkSDgoGdG91c2VyGAIgASgJEgwKBHVzZXIY",
-          "AyABKAkSCwoDY250GAQgASgFEg0KBXVzZXJzGAUgAygJEh4KB21zZ1R5cGUY",
-          "BiABKA4yDS5tZXNzYWdlVHlwZXMqNwoMbWVzc2FnZVR5cGVzEhIKDkdldE9u",
-          "bGluZVVzZXJzEAASBwoDQWxsEAESCgoGcGVyc29uEAJiBnByb3RvMw=="));
+          "Cg5jaGF0SW5mby5wcm90byLDAQoTY2hhdE1lc3NhZ2VSZXNwb25zZRIeCgdt",
+          "c2dUeXBlGAEgASgOMg0ubWVzc2FnZVR5cGVzEg8KB21lc3NhZ2UYAiABKAkS",
+          "CwoDY250GAMgASgFEigKBXVzZXJzGAQgAygLMhkuY2hhdE1lc3NhZ2VSZXNw",
+          "b25zZS51c2VyEhcKD3NlbGZjb25uZXRpb25JZBgFIAEoCRorCgR1c2VyEhUK",
+          "DWNvbm5lY3Rpb25faWQYASABKAkSDAoEbmFtZRgCIAEoCSKyAQoSY2hhdE1l",
+          "c3NhZ2VSZXF1ZXN0Eg8KB21lc3NhZ2UYASABKAkSDgoGdG91c2VyGAIgASgJ",
+          "EgwKBHVzZXIYAyABKAkSCwoDY250GAQgASgFEg0KBXVzZXJzGAUgAygJEh4K",
+          "B21zZ1R5cGUYBiABKA4yDS5tZXNzYWdlVHlwZXMSFwoPc2VsZmNvbm5ldGlv",
+          "bklkGAcgASgJEhgKEG90aGVyY29ubmV0aW9uSWQYCCABKAkqNwoMbWVzc2Fn",
+          "ZVR5cGVzEhIKDkdldE9ubGluZVVzZXJzEAASBwoDQWxsEAESCgoGcGVyc29u",
+          "EAJiBnByb3RvMw=="));
     descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
         new pbr::FileDescriptor[] { },
         new pbr::GeneratedClrTypeInfo(new[] {typeof(global::messageTypes), }, null, new pbr::GeneratedClrTypeInfo[] {
-          new pbr::GeneratedClrTypeInfo(typeof(global::chatMessageResponse), global::chatMessageResponse.Parser, new[]{ "MsgType", "Message", "Cnt", "Users" }, null, null, null, null),
-          new pbr::GeneratedClrTypeInfo(typeof(global::chatMessageRequest), global::chatMessageRequest.Parser, new[]{ "Message", "Touser", "User", "Cnt", "Users", "MsgType" }, null, null, null, null)
+          new pbr::GeneratedClrTypeInfo(typeof(global::chatMessageResponse), global::chatMessageResponse.Parser, new[]{ "MsgType", "Message", "Cnt", "Users", "SelfconnetionId" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::chatMessageResponse.Types.user), global::chatMessageResponse.Types.user.Parser, new[]{ "ConnectionId", "Name" }, null, null, null, null)}),
+          new pbr::GeneratedClrTypeInfo(typeof(global::chatMessageRequest), global::chatMessageRequest.Parser, new[]{ "Message", "Touser", "User", "Cnt", "Users", "MsgType", "SelfconnetionId", "OtherconnetionId" }, null, null, null, null)
         }));
   }
   #endregion
@@ -78,6 +82,7 @@ public sealed partial class chatMessageResponse : pb::IMessage<chatMessageRespon
     message_ = other.message_;
     cnt_ = other.cnt_;
     users_ = other.users_.Clone();
+    selfconnetionId_ = other.selfconnetionId_;
     _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
   }
 
@@ -121,12 +126,23 @@ public sealed partial class chatMessageResponse : pb::IMessage<chatMessageRespon
 
   /// <summary>Field number for the "users" field.</summary>
   public const int UsersFieldNumber = 4;
-  private static readonly pb::FieldCodec<string> _repeated_users_codec
-      = pb::FieldCodec.ForString(34);
-  private readonly pbc::RepeatedField<string> users_ = new pbc::RepeatedField<string>();
+  private static readonly pb::FieldCodec<global::chatMessageResponse.Types.user> _repeated_users_codec
+      = pb::FieldCodec.ForMessage(34, global::chatMessageResponse.Types.user.Parser);
+  private readonly pbc::RepeatedField<global::chatMessageResponse.Types.user> users_ = new pbc::RepeatedField<global::chatMessageResponse.Types.user>();
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-  public pbc::RepeatedField<string> Users {
+  public pbc::RepeatedField<global::chatMessageResponse.Types.user> Users {
     get { return users_; }
+  }
+
+  /// <summary>Field number for the "selfconnetionId" field.</summary>
+  public const int SelfconnetionIdFieldNumber = 5;
+  private string selfconnetionId_ = "";
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public string SelfconnetionId {
+    get { return selfconnetionId_; }
+    set {
+      selfconnetionId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+    }
   }
 
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -146,6 +162,7 @@ public sealed partial class chatMessageResponse : pb::IMessage<chatMessageRespon
     if (Message != other.Message) return false;
     if (Cnt != other.Cnt) return false;
     if(!users_.Equals(other.users_)) return false;
+    if (SelfconnetionId != other.SelfconnetionId) return false;
     return Equals(_unknownFields, other._unknownFields);
   }
 
@@ -156,6 +173,7 @@ public sealed partial class chatMessageResponse : pb::IMessage<chatMessageRespon
     if (Message.Length != 0) hash ^= Message.GetHashCode();
     if (Cnt != 0) hash ^= Cnt.GetHashCode();
     hash ^= users_.GetHashCode();
+    if (SelfconnetionId.Length != 0) hash ^= SelfconnetionId.GetHashCode();
     if (_unknownFields != null) {
       hash ^= _unknownFields.GetHashCode();
     }
@@ -182,6 +200,10 @@ public sealed partial class chatMessageResponse : pb::IMessage<chatMessageRespon
       output.WriteInt32(Cnt);
     }
     users_.WriteTo(output, _repeated_users_codec);
+    if (SelfconnetionId.Length != 0) {
+      output.WriteRawTag(42);
+      output.WriteString(SelfconnetionId);
+    }
     if (_unknownFields != null) {
       _unknownFields.WriteTo(output);
     }
@@ -200,6 +222,9 @@ public sealed partial class chatMessageResponse : pb::IMessage<chatMessageRespon
       size += 1 + pb::CodedOutputStream.ComputeInt32Size(Cnt);
     }
     size += users_.CalculateSize(_repeated_users_codec);
+    if (SelfconnetionId.Length != 0) {
+      size += 1 + pb::CodedOutputStream.ComputeStringSize(SelfconnetionId);
+    }
     if (_unknownFields != null) {
       size += _unknownFields.CalculateSize();
     }
@@ -221,6 +246,9 @@ public sealed partial class chatMessageResponse : pb::IMessage<chatMessageRespon
       Cnt = other.Cnt;
     }
     users_.Add(other.users_);
+    if (other.SelfconnetionId.Length != 0) {
+      SelfconnetionId = other.SelfconnetionId;
+    }
     _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
   }
 
@@ -248,9 +276,177 @@ public sealed partial class chatMessageResponse : pb::IMessage<chatMessageRespon
           users_.AddEntriesFrom(input, _repeated_users_codec);
           break;
         }
+        case 42: {
+          SelfconnetionId = input.ReadString();
+          break;
+        }
       }
     }
   }
+
+  #region Nested types
+  /// <summary>Container for nested types declared in the chatMessageResponse message type.</summary>
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public static partial class Types {
+    public sealed partial class user : pb::IMessage<user> {
+      private static readonly pb::MessageParser<user> _parser = new pb::MessageParser<user>(() => new user());
+      private pb::UnknownFieldSet _unknownFields;
+      [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+      public static pb::MessageParser<user> Parser { get { return _parser; } }
+
+      [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+      public static pbr::MessageDescriptor Descriptor {
+        get { return global::chatMessageResponse.Descriptor.NestedTypes[0]; }
+      }
+
+      [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+      pbr::MessageDescriptor pb::IMessage.Descriptor {
+        get { return Descriptor; }
+      }
+
+      [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+      public user() {
+        OnConstruction();
+      }
+
+      partial void OnConstruction();
+
+      [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+      public user(user other) : this() {
+        connectionId_ = other.connectionId_;
+        name_ = other.name_;
+        _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+      }
+
+      [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+      public user Clone() {
+        return new user(this);
+      }
+
+      /// <summary>Field number for the "connection_id" field.</summary>
+      public const int ConnectionIdFieldNumber = 1;
+      private string connectionId_ = "";
+      [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+      public string ConnectionId {
+        get { return connectionId_; }
+        set {
+          connectionId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+        }
+      }
+
+      /// <summary>Field number for the "name" field.</summary>
+      public const int NameFieldNumber = 2;
+      private string name_ = "";
+      [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+      public string Name {
+        get { return name_; }
+        set {
+          name_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+        }
+      }
+
+      [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+      public override bool Equals(object other) {
+        return Equals(other as user);
+      }
+
+      [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+      public bool Equals(user other) {
+        if (ReferenceEquals(other, null)) {
+          return false;
+        }
+        if (ReferenceEquals(other, this)) {
+          return true;
+        }
+        if (ConnectionId != other.ConnectionId) return false;
+        if (Name != other.Name) return false;
+        return Equals(_unknownFields, other._unknownFields);
+      }
+
+      [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+      public override int GetHashCode() {
+        int hash = 1;
+        if (ConnectionId.Length != 0) hash ^= ConnectionId.GetHashCode();
+        if (Name.Length != 0) hash ^= Name.GetHashCode();
+        if (_unknownFields != null) {
+          hash ^= _unknownFields.GetHashCode();
+        }
+        return hash;
+      }
+
+      [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+      public override string ToString() {
+        return pb::JsonFormatter.ToDiagnosticString(this);
+      }
+
+      [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+      public void WriteTo(pb::CodedOutputStream output) {
+        if (ConnectionId.Length != 0) {
+          output.WriteRawTag(10);
+          output.WriteString(ConnectionId);
+        }
+        if (Name.Length != 0) {
+          output.WriteRawTag(18);
+          output.WriteString(Name);
+        }
+        if (_unknownFields != null) {
+          _unknownFields.WriteTo(output);
+        }
+      }
+
+      [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+      public int CalculateSize() {
+        int size = 0;
+        if (ConnectionId.Length != 0) {
+          size += 1 + pb::CodedOutputStream.ComputeStringSize(ConnectionId);
+        }
+        if (Name.Length != 0) {
+          size += 1 + pb::CodedOutputStream.ComputeStringSize(Name);
+        }
+        if (_unknownFields != null) {
+          size += _unknownFields.CalculateSize();
+        }
+        return size;
+      }
+
+      [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+      public void MergeFrom(user other) {
+        if (other == null) {
+          return;
+        }
+        if (other.ConnectionId.Length != 0) {
+          ConnectionId = other.ConnectionId;
+        }
+        if (other.Name.Length != 0) {
+          Name = other.Name;
+        }
+        _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+      }
+
+      [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+      public void MergeFrom(pb::CodedInputStream input) {
+        uint tag;
+        while ((tag = input.ReadTag()) != 0) {
+          switch(tag) {
+            default:
+              _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+              break;
+            case 10: {
+              ConnectionId = input.ReadString();
+              break;
+            }
+            case 18: {
+              Name = input.ReadString();
+              break;
+            }
+          }
+        }
+      }
+
+    }
+
+  }
+  #endregion
 
 }
 
@@ -285,6 +481,8 @@ public sealed partial class chatMessageRequest : pb::IMessage<chatMessageRequest
     cnt_ = other.cnt_;
     users_ = other.users_.Clone();
     msgType_ = other.msgType_;
+    selfconnetionId_ = other.selfconnetionId_;
+    otherconnetionId_ = other.otherconnetionId_;
     _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
   }
 
@@ -358,6 +556,28 @@ public sealed partial class chatMessageRequest : pb::IMessage<chatMessageRequest
     }
   }
 
+  /// <summary>Field number for the "selfconnetionId" field.</summary>
+  public const int SelfconnetionIdFieldNumber = 7;
+  private string selfconnetionId_ = "";
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public string SelfconnetionId {
+    get { return selfconnetionId_; }
+    set {
+      selfconnetionId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+    }
+  }
+
+  /// <summary>Field number for the "otherconnetionId" field.</summary>
+  public const int OtherconnetionIdFieldNumber = 8;
+  private string otherconnetionId_ = "";
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public string OtherconnetionId {
+    get { return otherconnetionId_; }
+    set {
+      otherconnetionId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+    }
+  }
+
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   public override bool Equals(object other) {
     return Equals(other as chatMessageRequest);
@@ -377,6 +597,8 @@ public sealed partial class chatMessageRequest : pb::IMessage<chatMessageRequest
     if (Cnt != other.Cnt) return false;
     if(!users_.Equals(other.users_)) return false;
     if (MsgType != other.MsgType) return false;
+    if (SelfconnetionId != other.SelfconnetionId) return false;
+    if (OtherconnetionId != other.OtherconnetionId) return false;
     return Equals(_unknownFields, other._unknownFields);
   }
 
@@ -389,6 +611,8 @@ public sealed partial class chatMessageRequest : pb::IMessage<chatMessageRequest
     if (Cnt != 0) hash ^= Cnt.GetHashCode();
     hash ^= users_.GetHashCode();
     if (MsgType != global::messageTypes.GetOnlineUsers) hash ^= MsgType.GetHashCode();
+    if (SelfconnetionId.Length != 0) hash ^= SelfconnetionId.GetHashCode();
+    if (OtherconnetionId.Length != 0) hash ^= OtherconnetionId.GetHashCode();
     if (_unknownFields != null) {
       hash ^= _unknownFields.GetHashCode();
     }
@@ -423,6 +647,14 @@ public sealed partial class chatMessageRequest : pb::IMessage<chatMessageRequest
       output.WriteRawTag(48);
       output.WriteEnum((int) MsgType);
     }
+    if (SelfconnetionId.Length != 0) {
+      output.WriteRawTag(58);
+      output.WriteString(SelfconnetionId);
+    }
+    if (OtherconnetionId.Length != 0) {
+      output.WriteRawTag(66);
+      output.WriteString(OtherconnetionId);
+    }
     if (_unknownFields != null) {
       _unknownFields.WriteTo(output);
     }
@@ -446,6 +678,12 @@ public sealed partial class chatMessageRequest : pb::IMessage<chatMessageRequest
     size += users_.CalculateSize(_repeated_users_codec);
     if (MsgType != global::messageTypes.GetOnlineUsers) {
       size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) MsgType);
+    }
+    if (SelfconnetionId.Length != 0) {
+      size += 1 + pb::CodedOutputStream.ComputeStringSize(SelfconnetionId);
+    }
+    if (OtherconnetionId.Length != 0) {
+      size += 1 + pb::CodedOutputStream.ComputeStringSize(OtherconnetionId);
     }
     if (_unknownFields != null) {
       size += _unknownFields.CalculateSize();
@@ -473,6 +711,12 @@ public sealed partial class chatMessageRequest : pb::IMessage<chatMessageRequest
     users_.Add(other.users_);
     if (other.MsgType != global::messageTypes.GetOnlineUsers) {
       MsgType = other.MsgType;
+    }
+    if (other.SelfconnetionId.Length != 0) {
+      SelfconnetionId = other.SelfconnetionId;
+    }
+    if (other.OtherconnetionId.Length != 0) {
+      OtherconnetionId = other.OtherconnetionId;
     }
     _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
   }
@@ -507,6 +751,14 @@ public sealed partial class chatMessageRequest : pb::IMessage<chatMessageRequest
         }
         case 48: {
           MsgType = (global::messageTypes) input.ReadEnum();
+          break;
+        }
+        case 58: {
+          SelfconnetionId = input.ReadString();
+          break;
+        }
+        case 66: {
+          OtherconnetionId = input.ReadString();
           break;
         }
       }
