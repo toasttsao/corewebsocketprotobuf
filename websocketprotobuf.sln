@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebScoketClient", "WebScoke
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebSocketServer", "WebSocketServer\WebSocketServer.csproj", "{6920B1C6-3617-4871-9DF2-12052ABB315A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignalrServier", "SignalrServier\SignalrServier.csproj", "{1817B902-4DCA-460E-944B-79FBBA080DEE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{6920B1C6-3617-4871-9DF2-12052ABB315A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6920B1C6-3617-4871-9DF2-12052ABB315A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6920B1C6-3617-4871-9DF2-12052ABB315A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1817B902-4DCA-460E-944B-79FBBA080DEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1817B902-4DCA-460E-944B-79FBBA080DEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1817B902-4DCA-460E-944B-79FBBA080DEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1817B902-4DCA-460E-944B-79FBBA080DEE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
